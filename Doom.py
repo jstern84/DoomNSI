@@ -1,6 +1,3 @@
-# Séance 5 du 09/04/2024
-# Création du module structure (classe Mur)
-
 # pip install --force-reinstall -v "pyglet==1.5.28"
 
 # module pyglet principal (qu'on nenomme en pg pour plus de simplicité)
@@ -50,13 +47,13 @@ def on_key_press(symbol, modifiers):
 @window2d.event
 def on_key_release(symbol, modifiers):
     # touches de déplacement
-    if symbol == pg.window.key.Z: actions['avancer'] = False
-    if symbol == pg.window.key.S: actions['reculer'] = False
-    if symbol == pg.window.key.Q: actions['gauche'] = False
-    if symbol == pg.window.key.D: actions['droite'] = False
+    if symbol in C.JOUEUR().T_AVANCER: actions['avancer'] = False
+    if symbol in C.JOUEUR().T_RECULER: actions['reculer'] = False
+    if symbol in C.JOUEUR().T_STRAFE_G: actions['gauche'] = False
+    if symbol in C.JOUEUR().T_STRAFE_D: actions['droite'] = False
     # touches pour tourner
-    if symbol == pg.window.key.LEFT: actions['tourner_gauche'] = False
-    if symbol == pg.window.key.RIGHT: actions['tourner_droite'] = False
+    if symbol in C.JOUEUR().T_TOURNER_G: actions['tourner_gauche'] = False
+    if symbol in C.JOUEUR().T_TOURNER_D: actions['tourner_droite'] = False
 
 # évènement principal : rendu graphique
 @window2d.event
@@ -74,8 +71,8 @@ def update(dt):
     if actions['reculer']: joueur.avancer(-joueur.PAS, joueur.a, murs)
     if actions['gauche']: joueur.avancer(joueur.PAS, joueur.a+pi/2, murs)
     if actions['droite']: joueur.avancer(-joueur.PAS, joueur.a+pi/2, murs)
-    if actions['tourner_gauche']: joueur.tourner(0.2)
-    if actions['tourner_droite']: joueur.tourner(-0.2)
+    if actions['tourner_gauche']: joueur.tourner(joueur.ROT)
+    if actions['tourner_droite']: joueur.tourner(-joueur.ROT)
     if joueur.deplacement:
         joueur.tracer()
         joueur.deplacement = False
@@ -83,5 +80,7 @@ def update(dt):
 # boucle principale (30 Hz)
 pg.clock.schedule_interval(update, 1/30.0)
 
+# version de pyglet
+print("Version de Pyglet : ",pg.version)
 # lancement du jeu
 pg.app.run()
