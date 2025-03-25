@@ -17,11 +17,13 @@ class AFFICHAGE():
 	DX_RES, DY_RES = X_RES//2, Y_RES//2
 	# Synchronisation du rafraîchissement d'écran
 	V_SYNC = True
+	# Distance à l'écran virtuel de projection
+	D_Z = 1.
 
 # CONSTANTES RELATIVES AU JOUEUR
 class JOUEUR():
 	# vitesses de translation et rotation
-	V_TRANS, V_ROT = 10.0, 0.2
+	PAS, ROT = 10.0, 0.2
 	# touches pour déplacement
 	T_AVANCER, T_RECULER = [keys.UP, keys.Z], [keys.DOWN, keys.S]
 	T_TOURNER_G, T_TOURNER_D = [keys.LEFT], [keys.RIGHT]
