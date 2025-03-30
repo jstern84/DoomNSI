@@ -21,10 +21,12 @@ class Joueur: # la classe Joueur
         # Vecteur unitaire de visée
         self.V = (cos(self.a), sin(self.a))
         # "batch" du joueur
-        self.batch = pg.graphics.Batch()
-        self.dessin = {}
+        self.dessin = Dessin()
         # Booléen de déplacement
         self.deplacement = True
+    
+    def position(self):
+        return (self.x, self.y)
 
     def avancer(self, pas, a, murs):
         x = self.x + pas*cos(a)
@@ -33,7 +35,7 @@ class Joueur: # la classe Joueur
         #collision mur
         if collision:
             # calculer la glissage
-            MP = calc_AB((self.x, self.y), (x, y))
+            MP = calc_AB(self.position(), (x, y))
             k = calc_PS(MP, collision.u)
             x = self.x + k*collision.u[0]
             y = self.y + k*collision.u[1]
@@ -45,33 +47,39 @@ class Joueur: # la classe Joueur
 
     def tourner(self, angle):
         self.a += angle
+        self.V = (cos(self.a), sin(self.a))
         self.deplacement = True
 
     # mémorise les tracés du joueur (batch)
     def tracer(self):
-        # le joueur comme un cercle
-        self.dessin['corps'] = pg.shapes.Circle(self.x, self.y, 10, color =(50, 225, 30), batch = self.batch)
-        # segment "vecteur vitesse" qui pointe vers la direction de visée
-        self.dessin['visée'] = pg.shapes.Line(self.x, self.y, self.x + 20*cos(self.a), self.y + 20*sin(self.a), batch = self.batch)
+        self.dessin.reset()
+        dessins = [
+            # le joueur comme un cercle
+            pg.shapes.Circle(self.x, self.y, 10, color =(50, 225, 30), batch = self.dessin.batch),
+            # segment "vecteur vitesse" qui pointe vers la direction de visée
+            pg.shapes.Line(self.x, self.y, self.x + 20*cos(self.a), self.y + 20*sin(self.a), batch = self.dessin.batch)
+        ]
+        self.dessin.ajout(dessins)
+
     
     # dessine le joueur (batch)
     def afficher(self):
-        self.batch.draw()
+        self.dessin.dessiner()
 
     # test de collision : renvoie le mur concerné (False sinon)       
     def test_collision(self, murs, P):
         # vecteur déplacement du jouer
-        MP = calc_AB((self.x, self.y), P)
+        MP = calc_AB(self.position(), P)
         for mur in murs:
             AB = (mur.dx, mur.dy)
             # test 1 : Le joueur traverse-t-il (segment) la direction du mur (droite) ?
-            AM = calc_AB((mur.x1, mur.y1), (self.x, self.y))
-            AP = calc_AB((mur.x1, mur.y1), P)
+            AM = calc_AB(mur.A, self.position())
+            AP = calc_AB(mur.A, P)
             pv1, pv2 = calc_PV(AB, AM), calc_PV(AB, AP)
             test1 = (pv1<0 and pv2>0) or (pv1>0 and pv2<0)
             # test 2 : La direction du joueur (droite) traverse-t-elle le mur (segment) ?
-            MA = calc_AB((self.x, self.y), (mur.x1, mur.y1))
-            MB = calc_AB((self.x, self.y), (mur.x2, mur.y2))
+            MA = calc_AB(self.position(), mur.A)
+            MB = calc_AB(self.position(), mur.B)
             pv1, pv2 = calc_PV(MP, MA), calc_PV(MP, MB)
             test2 = (pv1<=0 and pv2>=0) or (pv1>=0 and pv2<=0)
             

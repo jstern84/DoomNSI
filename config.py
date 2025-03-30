@@ -18,7 +18,7 @@ class AFFICHAGE():
 	# Synchronisation du rafraîchissement d'écran
 	V_SYNC = True
 	# Distance à l'écran virtuel de projection
-	D_Z = 1.
+	D_Z = 150.
 
 # CONSTANTES RELATIVES AU JOUEUR
 class JOUEUR():
