@@ -12,13 +12,13 @@ class INTERFACE():
 # CONSTANTES RELATIVES A L'AFFICHAGE
 class AFFICHAGE():
 	# résolution
-	X_RES, Y_RES = 640, 480
+	X_RES, Y_RES = 800, 600
 	# coordonnées du centre
 	DX_RES, DY_RES = X_RES//2, Y_RES//2
 	# Synchronisation du rafraîchissement d'écran
 	V_SYNC = True
 	# Distance à l'écran virtuel de projection
-	D_Z = 150.
+	D_Z = 300.
 
 # CONSTANTES RELATIVES AU JOUEUR
 class JOUEUR():

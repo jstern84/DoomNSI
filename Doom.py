@@ -1,5 +1,3 @@
-# pip install --force-reinstall -v "pyglet==1.5.28"
-
 # module pyglet principal (qu'on nenomme en pg pour plus de simplicité)
 import pyglet as pg
 # import des fonctions trigo du module math
@@ -22,6 +20,7 @@ joueur = J.Joueur(250.1,250.1,0)
 murs = [S.Mur(400,100,800,100), S.Mur(800,100,1000,300), S.Mur(1000,300,1000,500), S.Mur(800,700,1000,500),
         S.Mur(400,700,800,700), S.Mur(200,500,400,700), S.Mur(200,300,200,500), S.Mur(200,300,400,100)]
 [mur.debug() for mur in murs]
+window2d.switch_to()
 [mur.tracer() for mur in murs]
 
 # Création d'une instance du rendu 3D
@@ -78,7 +77,6 @@ def tracer():
     window2d.switch_to()
     joueur.tracer()
     window3d.switch_to()
-    rendu_3d.calc_rendu3d(murs)
     rendu_3d.tracer()
 
 # boucle principale

@@ -7,6 +7,9 @@ import joueur as J
 import structure as S
 from outils import *
 
+class Except_Zneg(Exception):
+    pass
+
 class rendu_3d():
     def __init__(self, joueur):
         self.joueur = joueur
@@ -20,6 +23,8 @@ class rendu_3d():
         # calcul du coefficient de Thalès
         MP = calc_AB(self.joueur.position(), P)
         Z = calc_PS(MP, self.joueur.V)
+        if Z < 0:
+            raise Except_Zneg("Z négatif : une partie du mur est derrière !")
         k = C.AFFICHAGE().D_Z / Z  
         # calcul des coordonnées de projection
         X = calc_PV(MP, self.joueur.V) * k + C.AFFICHAGE().DX_RES
@@ -27,14 +32,17 @@ class rendu_3d():
         return (X,Y)
 
     def calc_rendu3d(self, murs):
-        H_SOL, H_PLAF = 0, 100
+        H_SOL, H_PLAF = 0, 200
         # reset
         self.quads = []
         for mur in murs:
-            A = self.projection(mur.A, H_SOL)
-            B = self.projection(mur.A, H_PLAF)
-            C = self.projection(mur.B, H_PLAF)
-            D = self.projection(mur.B, H_SOL)
+            try: 
+                A = self.projection(mur.A, H_SOL)
+                B = self.projection(mur.A, H_PLAF)
+                C = self.projection(mur.B, H_PLAF)
+                D = self.projection(mur.B, H_SOL)
+            except Except_Zneg:
+                continue
             self.quads.append((A,B,C,D))
 
     def tracer(self):
